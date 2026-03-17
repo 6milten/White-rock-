@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>White Rock Boathouse — Public Accountability</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --navy:#003087;--blue:#005bbb;--light-blue:#e8f0fb;--mid-blue:#d0e4f7;
+      --red:#b82020;--gold:#c8900a;--dark:#16213e;--gray:#4a4a5a;
+      --light:#f5f7fa;--white:#fff;--border:#cdd8ec;
+    }
+    body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--dark);background:var(--white);line-height:1.7}
+
+    /* ── ALERT BANNER ── */
+    .alert-banner{background:var(--red);color:#fff;text-align:center;padding:11px 20px;font-size:.875rem;font-weight:600;letter-spacing:.03em}
+
+    /* ── HEADER ── */
+    header{background:var(--navy);padding:32px 40px 0}
+    .hdr{max-width:1080px;margin:0 auto}
+    .hdr-eyebrow{font-size:.72rem;color:#9ab8e0;text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
+    .hdr-title{font-size:1.85rem;font-weight:700;color:#fff;line-height:1.25;margin-bottom:8px}
+    .hdr-sub{font-size:.95rem;color:#b8cfe8;margin-bottom:30px}
+    nav{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.15);overflow-x:auto}
+    nav button{background:transparent;border:none;color:#b8cfe8;padding:14px 20px;font-size:.83rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,background .2s,border-color .2s}
+    nav button:hover{color:#fff;background:rgba(255,255,255,.07)}
+    nav button.active{color:#fff;border-bottom-color:var(--gold)}
+
+    /* ── MAIN ── */
+    main{max-width:1080px;margin:0 auto;padding:0 24px 70px}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    /* ── HERO ── */
+    .hero{background:linear-gradient(135deg,#dce9f8 0%,#eef4fb 100%);border-left:5px solid var(--navy);padding:36px 40px;margin:40px 0 34px;border-radius:4px}
+    .hero h1{font-size:1.65rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:12px}
+    .hero p{font-size:1rem;color:var(--gray);max-width:760px}
+
+    /* ── SECTION LABELS ── */
+    .eyebrow{font-size:.72rem;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+    h2{font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:16px}
+    h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+
+    /* ── ISSUE NUMBER HEADER ── */
+    .issue-header{display:flex;align-items:flex-start;gap:20px;margin:40px 0 20px}
+    .issue-num{width:52px;min-width:52px;height:52px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0}
+    .issue-header-text .eyebrow{margin-bottom:2px}
+    .issue-header-text h2{margin-bottom:0}
+    hr.divider{border:none;border-top:1px solid var(--border);margin:44px 0}
+
+    /* ── CARD ── */
+    .card{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:24px 28px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,48,135,.05)}
+    .card.top-blue{border-top:4px solid var(--navy)}
+    .card.top-red{border-top:4px solid var(--red)}
+    .card p{color:var(--gray);font-size:.94rem;margin-top:8px}
+    .card p+p{margin-top:10px}
+    .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 11px;border-radius:20px;margin-bottom:8px}
+    .tag-red{background:#fde8e8;color:#8b1010;border:1px solid #f0bbbb}
+    .tag-yellow{background:#fff3cd;color:#7a5800;border:1px solid #e8d070}
+    .tag-blue{background:#dce9f8;color:#003087;border:1px solid #a8c8f0}
+
+    /* ── CALLOUT BOXES ── */
+    .callout{padding:20px 24px;margin:22px 0;border-radius:0 4px 4px 0}
+    .callout-gold{background:#fdf6e3;border-left:5px solid var(--gold)}
+    .callout-red{background:#fdf0ee;border-left:5px solid var(--red)}
+    .callout-blue{background:#e8f0fb;border-left:5px solid var(--navy)}
+    .callout strong{display:block;font-size:.88rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+    .callout-gold strong{color:#7a5800}
+    .callout-red strong{color:var(--red)}
+    .callout-blue strong{color:var(--navy)}
+    .callout p{font-size:.93rem;color:var(--gray)}
+
+    /* ── STEP FLOW (Audit trail) ── */
+    .step-flow{margin:24px 0 32px}
+    .step{display:flex;gap:16px;margin-bottom:6px;position:relative}
+    .step-line{display:flex;flex-direction:column;align-items:center}
+    .step-dot{width:36px;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;background:var(--navy);flex-shrink:0}
+    .step-dot.warn{background:var(--red)}
+    .step-connector{width:2px;flex:1;min-height:20px;background:var(--border);margin:4px 0}
+    .step-body{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:16px 20px;flex:1;margin-bottom:16px}
+    .step-body .step-date{font-size:.72rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+    .step-body h3{font-size:.97rem;margin-bottom:4px}
+    .step-body p{font-size:.88rem;color:var(--gray)}
+
+    /* ── EMAIL DISPLAY ── */
+    .email-wrap{background:var(--white);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:22px 0;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+    .email-head{background:var(--light);border-bottom:1px solid var(--border);padding:16px 22px}
+    .email-from{font-weight:700;color:var(--dark);font-size:.95rem}
+    .email-meta{font-size:.82rem;color:var(--gray);line-height:1.7;margin-top:3px}
+    .email-subject{font-size:1.05rem;font-weight:700;color:var(--navy);margin-top:8px}
+    .email-body{padding:22px 26px;font-size:.94rem;color:var(--gray);line-height:1.85}
+    .email-body p{margin-bottom:14px}
+    .email-sig{font-size:.88rem;color:var(--dark);border-top:1px solid var(--border);margin-top:16px;padding-top:14px}
+    .email-sig strong{color:var(--navy)}
+    .evidence-label{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--navy);display:inline-block;padding:4px 12px;border-radius:3px;margin-bottom:10px}
+
+    /* ── 3-CARD GRID (HOME) ── */
+    .three-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin:24px 0 32px}
+    .three-card{background:var(--white);border:1px solid var(--border);border-top:4px solid var(--navy);border-radius:6px;padding:24px;box-shadow:0 2px 8px rgba(0,48,135,.06)}
+    .three-card .icon{font-size:1.6rem;margin-bottom:10px}
+    .three-card p{font-size:.9rem;color:var(--gray);margin-top:6px}
+
+    /* ── TIMELINE ── */
+    .timeline{position:relative;margin:28px 0}
+    .timeline::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:3px;background:var(--border)}
+    .tl-item{display:flex;gap:22px;margin-bottom:24px;position:relative}
+    .tl-dot{width:38px;min-width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;position:relative;z-index:1;flex-shrink:0}
+    .tl-dot.warn{background:var(--red)}
+    .tl-body{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:16px 20px;flex:1}
+    .tl-date{font-size:.72rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+    .tl-body p{font-size:.9rem;color:var(--gray);margin-top:6px}
+    .tl-link{display:inline-block;margin-top:10px;background:var(--navy);color:#fff;text-decoration:none;padding:8px 20px;border-radius:4px;font-size:.85rem;font-weight:600;transition:background .2s}
+    .tl-link:hover{background:var(--blue)}
+
+    /* ── CTA SECTION ── */
+    .cta-banner{background:linear-gradient(135deg,var(--navy) 0%,#004bb5 100%);color:#fff;border-radius:8px;padding:44px 40px;text-align:center;margin-bottom:40px}
+    .cta-banner h2{color:#fff;font-size:1.55rem;margin-bottom:10px}
+    .cta-banner p{color:#b8cfe8;font-size:1rem;max-width:580px;margin:0 auto 26px}
+    .cta-btn{display:inline-block;background:var(--gold);color:#1a1000;font-weight:700;padding:13px 34px;border-radius:4px;text-decoration:none;font-size:.95rem;letter-spacing:.04em;border:none;cursor:pointer;font-family:inherit;transition:background .2s}
+    .cta-btn:hover{background:#e0a010}
+
+    .demands-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin:24px 0 36px}
+    .demand{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:20px 22px}
+    .demand .icon{font-size:1.4rem;margin-bottom:8px}
+    .demand p{font-size:.88rem;color:var(--gray);margin-top:6px}
+
+    .template-box{background:var(--light);border:1px solid var(--border);border-radius:6px;padding:26px 30px;margin:28px 0}
+    .template-text{background:#fff;border:1px solid var(--border);border-radius:4px;padding:18px 22px;font-size:.9rem;color:var(--gray);line-height:1.85;font-style:italic}
+    .template-text p{margin-bottom:12px}
+
+    .council-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:22px 0 36px}
+    .council-card{background:#fff;border:1px solid var(--border);border-radius:6px;padding:20px 22px}
+    .council-card .dist{font-size:.72rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+    .council-card h3{font-size:.97rem}
+    .council-card .info{font-size:.85rem;color:var(--gray);margin-top:10px;line-height:1.65}
+    .council-card a{color:var(--blue);text-decoration:none}
+    .council-card a:hover{text-decoration:underline}
+
+    /* ── ARTICLE CARD ── */
+    .article-card{background:#fff;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:20px 0}
+    .article-card-head{background:var(--light);border-bottom:1px solid var(--border);padding:22px 28px}
+    .article-card-head h3{font-size:1.1rem;color:var(--dark);margin-top:6px;line-height:1.4}
+    .article-pub{font-size:.8rem;color:var(--gray)}
+    .article-card-body{padding:22px 28px;font-size:.94rem;color:var(--gray);line-height:1.85}
+    .article-card-body p{margin-bottom:14px}
+    .read-btn{display:inline-block;background:var(--navy);color:#fff;text-decoration:none;padding:10px 24px;border-radius:4px;font-size:.88rem;font-weight:600;margin-top:6px;transition:background .2s}
+    .read-btn:hover{background:var(--blue)}
+
+    /* ── FOOTER ── */
+    footer{background:var(--dark);color:#7a95c0;text-align:center;padding:28px 24px;font-size:.83rem;line-height:1.85}
+    footer a{color:#9ab8e0}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:620px){
+      header{padding:22px 18px 0}
+      .hdr-title{font-size:1.35rem}
+      .hero{padding:24px 20px}
+      .hero h1{font-size:1.3rem}
+      main{padding:0 16px 48px}
+      .cta-banner{padding:30px 18px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="alert-banner">
+  ⚠ &nbsp; A Taxpayer-Funded Public Facility at White Rock Lake Is Being Used to Restrict Public Access &mdash; The City of Dallas Has Failed to Act
+</div>
+
+<header>
+  <div class="hdr">
+    <div class="hdr-eyebrow">Public Accountability Initiative &middot; Dallas, Texas</div>
+    <h1 class="hdr-title">White Rock Boathouse: The Public Deserves Better</h1>
+    <p class="hdr-sub">Documenting three documented failures at a city-owned public facility — and the City of Dallas's refusal to address them.</p>
+    <nav>
+      <button class="active" onclick="show('home',this)">Home</button>
+      <button onclick="show('issue1',this)">Issue 1: Access</button>
+      <button onclick="show('issue2',this)">Issue 2: Governance</button>
+      <button onclick="show('issue3',this)">Issue 3: Audit Failures</button>
+      <button onclick="show('history',this)">History &amp; Press</button>
+      <button onclick="show('action',this)">Take Action</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     HOME
+══════════════════════════════════════════ -->
+<div id="tab-home" class="tab-panel active">
+
+  <div class="hero">
+    <h1>A Public Facility. Private Control. No Accountability.</h1>
+    <p>White Rock Boathouse sits on public land at White Rock Lake — owned by the City of Dallas and funded by every Dallas taxpayer. It is <strong>one of the largest boathouses in the country</strong>. Yet Dallas residents and nonprofit organizations are being turned away while two private schools and a private university are granted access as paying tenants. Financial safeguards mandated by City Council have gone <strong>unenforced</strong>, and the governing board has <strong>operated without oversight</strong>. The City has been informed at every step. It has chosen not to act.</p>
+  </div>
+
+  <div class="eyebrow">Three Documented Failures</div>
+  <h2>What This Site Is About</h2>
+  <div class="three-grid">
+    <div class="three-card">
+      <div class="icon">🚫</div>
+      <span class="tag tag-red">Issue 1</span>
+      <h3>Public Access Denied</h3>
+      <p>Dallas residents and nonprofits are being turned away from a publicly-owned facility. The operator's Code of Conduct bans participation by anyone affiliated with a competing organization — on public property, using public resources.</p>
+      <p style="margin-top:12px"><a href="#" onclick="show('issue1',document.querySelectorAll('nav button')[1]);return false;" style="color:var(--blue);font-weight:600;font-size:.88rem;">Read Issue 1 →</a></p>
+    </div>
+    <div class="three-card">
+      <div class="icon">🏛️</div>
+      <span class="tag tag-yellow">Issue 2</span>
+      <h3>Unchecked Governance</h3>
+      <p>A small, self-perpetuating private board has exercised long-term control over this city facility with no term limits — despite assurances made to the Park Board in 2019 that governance safeguards would be implemented.</p>
+      <p style="margin-top:12px"><a href="#" onclick="show('issue2',document.querySelectorAll('nav button')[2]);return false;" style="color:var(--blue);font-weight:600;font-size:.88rem;">Read Issue 2 →</a></p>
+    </div>
+    <div class="three-card">
+      <div class="icon">📋</div>
+      <span class="tag tag-blue">Issue 3</span>
+      <h3>Audit Mandate Unmet</h3>
+      <p>A 2019 City audit found serious deficiencies. A 2022 contract amendment required independent financial audits. The operator has continued submitting weaker compilation reports — and the City has not enforced compliance.</p>
+      <p style="margin-top:12px"><a href="#" onclick="show('issue3',document.querySelectorAll('nav button')[3]);return false;" style="color:var(--blue);font-weight:600;font-size:.88rem;">Read Issue 3 →</a></p>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>⚠ City Staff Have Acknowledged the Problem — And Done Nothing</strong>
+    <p>According to documented accounts, City staff have acknowledged that certain practices at the boathouse are <em>"not right, or against Texas law"</em> — yet the City's official response has been to say the contract is with the operator, and that public access is simply not the City's concern. A <strong>citizen-prepared briefing submitted to Dallas City Council on February 8, 2026</strong> — drawing on public records, open records disclosures, and documented City communications — lays out all three issues in detail.</p>
+  </div>
+
+</div><!-- /home -->
+
+
+<!-- ══════════════════════════════════════════
+     ISSUE 1: ACCESS
+══════════════════════════════════════════ -->
+<div id="tab-issue1" class="tab-panel">
+
+  <div class="issue-header">
+    <div class="issue-num">1</div>
+    <div class="issue-header-text">
+      <div class="eyebrow">Issue 1 of 3 &middot; Citizen Briefing to City Council, Feb. 8, 2026</div>
+      <h2>Public Access &amp; Use of a City Asset</h2>
+    </div>
+  </div>
+
+  <div class="card top-blue">
+    <span class="tag tag-red">Privatization of Public Property</span>
+    <p>White Rock Boathouse is a <strong>city-owned facility on public land</strong> — and one of the <strong>largest boathouses in the country</strong>. Its founding agreement states it exists "for the use and enjoyment to all segments of the Dallas Community." Yet citizens and nonprofit rowing programs report being routinely <strong>excluded and restricted</strong> from this expansive, taxpayer-funded facility.</p>
+    <p>Signage at or near the building and docks reportedly indicates <strong>"private" property</strong> — on land owned by the City of Dallas and maintained with public funds.</p>
+    <p>Access restrictions have been justified by the operator on <strong>"capacity" grounds</strong>. However, City emails obtained through open records requests indicate that capacity is, in fact, available. <strong>No independent, City-reviewed capacity assessment has ever been conducted.</strong></p>
+    <p>Meanwhile, <strong>three private programs operate inside the city-owned building as paying tenants</strong> — at non-publicly disclosed rental rates negotiated with the operator alone, with no City review:</p>
+  </div>
+
+  <!-- WHO GETS IN vs. WHO DOESN'T -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0 28px;">
+    <div class="card" style="border-top:4px solid var(--red);">
+      <span class="tag tag-red">Turned Away</span>
+      <h3>Dallas Community &amp; Nonprofits</h3>
+      <p>Dallas residents, independent rowers, and nonprofit rowing organizations affiliated with any organization that competes with the operator are denied access — on publicly-owned land, in a publicly-funded facility.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #4a7c3f;">
+      <span class="tag" style="background:#e8f5e9;color:#2e5c28;border:1px solid #a8d5a2;">Granted Access</span>
+      <h3>Three Private Programs</h3>
+      <p>The following programs operate as tenants inside the City-owned building, paying rent to the private operator at undisclosed rates:</p>
+      <ul style="margin-top:10px;padding-left:18px;font-size:.9rem;color:var(--gray);line-height:1.9;">
+        <li><strong>Jesuit College Preparatory School</strong> — a private school in Dallas</li>
+        <li><strong>Ursuline Academy of Dallas</strong> — a private school in Dallas</li>
+        <li><strong>Southern Methodist University (SMU) Women's Rowing Team</strong> — a private university located in Highland Park, a separate municipality outside the City of Dallas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-gold">
+    <strong>The Double Standard in Plain Terms</strong>
+    <p>Two private schools and a private university — none of them City of Dallas public institutions — have been granted tenancy inside a <em>City-owned public facility</em>, paying rent to a private operator whose rates are not publicly disclosed. At the same time, Dallas community members and nonprofit rowing organizations are turned away. The City of Dallas has taken no action to investigate or change this arrangement.</p>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Citizen Briefing Finding</strong>
+    <p>A City asset may be operating in a way that <strong>effectively privatizes access</strong>, presents public land and docks as private property, and embeds undisclosed private tenancy in a public facility — all without City oversight or review.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- Code of Conduct -->
+  <div class="eyebrow">Supporting Evidence</div>
+  <h2>The Code of Conduct: How Access Is Restricted</h2>
+
+  <div class="card top-red">
+    <span class="tag tag-red">Code of Conduct Analysis · 2018–2024</span>
+    <h3>From Community Policy to Exclusion Tool</h3>
+    <p>A review of White Rock Boathouse's Codes of Conduct from 2018 through 2024 reveals a systematic shift away from public access toward exclusionary, private-club-style control:</p>
+    <p><strong>City oversight removed:</strong> The 2021 version included a City oversight and reporting pathway for resolving disputes. By 2023, this was removed entirely — meaning WRBH now enforces its own membership bans without any City review, potentially violating the terms of a public facility lease.</p>
+    <p><strong>Anti-competition clauses introduced:</strong> Starting in 2021, the Code began requiring mandatory affiliation and restricting members from volunteering or coaching at other clubs. These rules appear designed to <strong>exclude community participation</strong> and suppress competition — on publicly-owned property.</p>
+    <p><strong>Due process eliminated:</strong> The 2018 version gave members the right to defend themselves before termination. This protection was eliminated by 2023.</p>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Why This Matters</strong>
+    <p>Restricting access to a city-managed public facility based on external affiliations may conflict with public-access and equal-opportunity provisions under municipal and civil-rights law. The City has been made aware of these Code changes — and has taken no action to review or reverse them.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- City Email on Access -->
+  <div class="eyebrow">The City's Official Response</div>
+  <h2>What the City Said When Asked About Public Access</h2>
+  <p style="color:var(--gray);margin-bottom:18px;font-size:.95rem;">When concerned residents raised the issue of public access denials, this is the official written response from the City of Dallas Park &amp; Recreation Superintendent:</p>
+
+  <div class="evidence-label">📧 City Email — Obtained via Open Records</div>
+  <div class="email-wrap">
+    <div class="email-head">
+      <div class="email-from">From: Olusola (Shola) Adebajo — Superintendent, Dallas Park &amp; Recreation</div>
+      <div class="email-meta">
+        <strong>To:</strong> Austin, Maryann &nbsp;|&nbsp; <strong>Cc:</strong> Clyde<br/>
+        <strong>Subject:</strong> RE: Question of Public Access
+      </div>
+    </div>
+    <div class="email-body">
+      <p>Good Morning Austin,</p>
+      <p>I appreciate your concern and need for clarity as it relates to contractual terms and obligations. <strong>There is nothing within White Rock Boathouse, Inc.'s contract that prohibits them from denying individuals affiliated with another rowing organization that competes with the one sponsored by White Rock Boathouse, Inc. access to the premises.</strong> Furthermore, there is nothing that prohibits them from denying access to any individual/organization from the premises period.</p>
+      <p>The City of Dallas is not a party to any agreement White Rock Boathouse, Inc. has with any independent rowing organizations nor are we privy to what those requirements for access are. <strong>The City's contract is with White Rock Boathouse Inc. solely and we are only responsible for enforcing that contract.</strong></p>
+      <p>Yours Sincerely,</p>
+      <div class="email-sig">
+        <strong>Shola Adebajo</strong><br/>
+        Superintendent, Park &amp; Recreation Department<br/>
+        City of Dallas &nbsp;|&nbsp; Office: 214-670-8858
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-gold">
+    <strong>What This Email Tells Us</strong>
+    <p>The City Superintendent openly admits the City's own contract contains <strong>no requirement that this public facility remain open to the public</strong>. The operator can deny access to anyone — and the City considers this acceptable. The City claims it has no responsibility for ensuring that a taxpayer-funded facility on public land serves the public. This is the official position of the City of Dallas.</p>
+  </div>
+
+</div><!-- /issue1 -->
+
+
+<!-- ══════════════════════════════════════════
+     ISSUE 2: GOVERNANCE
+══════════════════════════════════════════ -->
+<div id="tab-issue2" class="tab-panel">
+
+  <div class="issue-header">
+    <div class="issue-num">2</div>
+    <div class="issue-header-text">
+      <div class="eyebrow">Issue 2 of 3 &middot; Citizen Briefing to City Council, Feb. 8, 2026</div>
+      <h2>Governance Practices of the Operator</h2>
+    </div>
+  </div>
+
+  <div class="card top-blue">
+    <span class="tag tag-yellow">Private Club Control Over Public Facility</span>
+    <p>The operator, White Rock Boathouse, Inc., appears to use <strong>private-club-style discretion</strong> over who may participate in and access the facility — including selective admission, re-admission criteria, and codes of conduct that dictate who can participate and under what conditions.</p>
+    <p>The operator's board operates with <strong>no term limits</strong>, enabling long-term concentration of control over the management of a city asset. A small group of individuals has exercised ongoing, unchecked authority over a publicly-owned facility without standard nonprofit governance safeguards.</p>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Promises Made to the Park Board in 2019 — Never Kept</strong>
+    <p>In the September 5, 2019 Park Board meeting, the operator reportedly assured the Park Board that <strong>term limits and other governance safeguards would be implemented</strong>. Those commitments were never fulfilled. After some initial adjustments following City engagement, practices reverted — suggesting either weak follow-through by City staff or deliberate non-compliance by the operator.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="eyebrow">Why This Matters</div>
+  <h2>The Governance Failure in Plain Terms</h2>
+
+  <div class="card">
+    <h3>No Term Limits = No Accountability</h3>
+    <p>When the same individuals control a private nonprofit board indefinitely, there is no mechanism for fresh perspectives, community input, or corrective change. For a board operating a <strong>city-owned public facility</strong>, this is not just a governance concern — it raises serious questions about whose interests are being served.</p>
+  </div>
+
+  <div class="card">
+    <h3>The City Has the Authority — But Has Not Used It</h3>
+    <p>The City of Dallas is the landlord of this facility and a party to the operating contract. It has the legal authority to require governance standards as a condition of the lease. It has not done so, despite repeated concerns raised by the public, Park Board members, and documented instances of the operator reverting to prior practices.</p>
+  </div>
+
+  <div class="card">
+    <h3>Self-Policing Without City Review</h3>
+    <p>As documented in the Code of Conduct analysis (see Issue 1), the operator removed the City oversight pathway from its governing documents by 2023. The board now enforces its own membership bans, exclusions, and conduct rules — on a public facility — with no City review process in place.</p>
+  </div>
+
+  <div class="callout callout-gold">
+    <strong>Citizen Briefing Finding</strong>
+    <p>A small, self-perpetuating private board appears to exercise long-term control over a city facility, <strong>without clear evidence of standard governance safeguards being in place or enforced</strong> — despite prior assurances and a documented history of noncompliance.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="eyebrow">Who Is Running White Rock Boathouse, Inc.</div>
+  <h2>The People in Control of This Public Facility</h2>
+  <p style="color:var(--gray);font-size:.95rem;margin-bottom:22px;">The following individuals have been identified as holding leadership and operational roles at White Rock Boathouse, Inc. — the private nonprofit operator of this city-owned public facility:</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:28px;">
+    <div class="card" style="border-top:4px solid var(--navy);">
+      <span class="tag tag-blue">Board</span>
+      <h3>Sue Ellen Chambers</h3>
+      <p>Identified in City communications as a primary representative and signatory for White Rock Boathouse, Inc.</p>
+    </div>
+    <div class="card" style="border-top:4px solid var(--navy);">
+      <span class="tag tag-blue">Board</span>
+      <h3>Jonathan Thalheimer</h3>
+      <p>Board member, White Rock Boathouse, Inc.</p>
+    </div>
+    <div class="card" style="border-top:4px solid var(--navy);">
+      <span class="tag tag-blue">Board</span>
+      <h3>Ted Ellis</h3>
+      <p>Board member, White Rock Boathouse, Inc.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #6a6a6a;">
+      <span class="tag" style="background:#f0f0f0;color:#444;border:1px solid #ccc;">Employee</span>
+      <h3>Kevin Jones</h3>
+      <p>Employee, White Rock Boathouse, Inc.</p>
+    </div>
+    <div class="card" style="border-top:4px solid #6a6a6a;">
+      <span class="tag" style="background:#f0f0f0;color:#444;border:1px solid #ccc;">Volunteer Coach</span>
+      <h3>Lisa Henry</h3>
+      <p>Volunteer coach, White Rock Boathouse, Inc.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>Why This Matters</strong>
+    <p>The board of a private nonprofit — with no term limits, no City-required governance review, and no transparency requirements — makes all decisions about who accesses this publicly-owned facility. Dallas taxpayers have no say in who sits on this board, and the City has taken no steps to require greater public accountability from the individuals who control this public asset.</p>
+  </div>
+
+</div><!-- /issue2 -->
+
+
+<!-- ══════════════════════════════════════════
+     ISSUE 3: AUDIT FAILURES
+══════════════════════════════════════════ -->
+<div id="tab-issue3" class="tab-panel">
+
+  <div class="issue-header">
+    <div class="issue-num">3</div>
+    <div class="issue-header-text">
+      <div class="eyebrow">Issue 3 of 3 &middot; Citizen Briefing to City Council, Feb. 8, 2026</div>
+      <h2>Financial Accountability &amp; Audit Failures</h2>
+    </div>
+  </div>
+
+  <p style="color:var(--gray);font-size:.97rem;margin-bottom:28px;">This issue has a documented paper trail. A City audit found problems. The City created a legal obligation to fix them. The operator has not complied. The City has not enforced. Here is the full story:</p>
+
+  <!-- Step flow -->
+  <div class="eyebrow">The Audit Trail — Step by Step</div>
+  <h2>How We Got Here</h2>
+
+  <div class="step-flow">
+
+    <div class="step">
+      <div class="step-line">
+        <div class="step-dot">1</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-date">2019 — City Audit Report A19-010</div>
+        <h3>Audit Finds Serious Deficiencies at White Rock Boathouse</h3>
+        <p>Called for by City Council Member Mark Clayton, the 2019 City audit found that the Park &amp; Recreation Division had <strong>no formal policies or procedures</strong> for contract oversight of White Rock Boathouse. Key findings included:</p>
+        <p>• The Boathouse operated the Boomerang Boathouse under an <strong>expired contract</strong> from mid-2013 to late 2018 — and the City failed to notice.</p>
+        <p>• The City never validated whether the revenue figures used to calculate payments were accurate or complete.</p>
+        <p>• Prior to November 2016, Boathouse did not maintain <strong>identifiable financial records</strong>.</p>
+        <p>• From FY 2013–2017, Boathouse did not submit required annual financial statements in accordance with GAAP.</p>
+        <p>• <strong>Boathouse did not have adequate internal controls over expenses.</strong></p>
+        <p>The audit concluded that the City could not confirm whether required payments were complete or accurate, and that the risk of undetected contract noncompliance was high.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-line">
+        <div class="step-dot">2</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-date">March 2022 — Supplemental Agreement No. 1</div>
+        <h3>City Requires Independent Audits — In Writing, By Contract</h3>
+        <p>In direct response to the 2019 audit findings, the City and White Rock Boathouse executed a formal contract amendment — <strong>Supplemental Agreement No. 1</strong> (City File No. 22-5339, effective February 10, 2022).</p>
+        <p>Section 8.15 of the amended agreement explicitly requires that Boathouse's year-end financial information be either:</p>
+        <p><strong>(a)</strong> Audited by an independent certified public accountant; <em>or</em></p>
+        <p><strong>(b)</strong> Examined by an independent CPA with an <em>Examination-Level Attestation Report</em> — which requires the CPA to express an opinion and provide assurance that Filter Building gross sales and revenues are materially complete and accurate, and that Boathouse is conducting proper accounting and internal controls.</p>
+        <p>This was not a suggestion. It was a <strong>contractual obligation</strong>, signed by the City Manager and the Boathouse President.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-line">
+        <div class="step-dot warn">3</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-date">2022–2024 — Non-Compliance</div>
+        <h3>Operator Submits Compilations — Not Audits — And the City Does Nothing</h3>
+        <p>Despite the clear contractual requirement, financial submissions for fiscal years <strong>2022 and 2024</strong> were provided via <em>Compilation Reports</em>. A compilation is a fundamentally different — and significantly weaker — form of financial reporting:</p>
+        <p>• A <strong>compilation</strong> involves no testing, no verification, and no independent assurance. It merely organizes management-provided numbers into financial statement format.</p>
+        <p>• An <strong>audit or examination with attestation</strong> requires the CPA to independently verify the accuracy of revenue figures and provide a professional opinion.</p>
+        <p>The CPA reports on file <strong>do not reflect independent verification of gross revenue figures</strong> used to calculate payments owed to the City. Based on unverified submissions, the City received $38,431 (2022) and $25,365 (2024).</p>
+        <p><strong>No City department has been identified as responsible for verifying or enforcing the audit requirement.</strong></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-line">
+        <div class="step-dot warn">!</div>
+      </div>
+      <div class="step-body">
+        <div class="step-date">Today — The Enforcement Gap</div>
+        <h3>A Council-Level Safeguard, Completely Unenforced</h3>
+        <p>The City Council mandated independent financial oversight after the 2019 audit revealed that the City could not verify whether it was receiving the correct payments from the Boathouse. That mandate is now itself unenforced. <strong>The problem the audit was meant to fix has not been fixed.</strong></p>
+      </div>
+    </div>
+
+  </div><!-- /step-flow -->
+
+  <!-- City email on audit -->
+  <hr class="divider"/>
+  <div class="eyebrow">Supporting Evidence</div>
+  <h2>The City's Own Email Confirms Non-Compliance Was Known</h2>
+  <p style="color:var(--gray);font-size:.94rem;margin-bottom:18px;">On January 28, 2025, Nicole Oliver, Supervisor of Business for the Dallas Park &amp; Recreation Department, sent the following email to the White Rock Boathouse operator — acknowledging that the 2023 year-end financial report <strong>did not meet the Supplemental Agreement requirements</strong>:</p>
+
+  <div class="evidence-label">📧 City Email — Obtained via Open Records</div>
+  <div class="email-wrap">
+    <div class="email-head">
+      <div class="email-from">From: Nicole Oliver — Supervisor, Business, Dallas Park &amp; Recreation</div>
+      <div class="email-meta">
+        <strong>To:</strong> Sue Ellen Chambers, White Rock Rowing &nbsp;|&nbsp; <strong>Cc:</strong> Hernandez, Maryann<br/>
+        <strong>Date:</strong> Tuesday, January 28, 2025, 2:01 PM<br/>
+        <strong>Subject:</strong> WRBI – Year End Financials Requirement for 2024
+      </div>
+    </div>
+    <div class="email-body">
+      <p>Sue Ellen,</p>
+      <p>Our internal controls manager reviewed your 2023 Year-end Financial Reports and noticed that <strong>the report did not meet the Supplement #1 requirements.</strong> While the report was prepared in GAAP, it was not audited by an independent certified public accountant OR examined by an independent CPA that provided an Examination-Level Attestation Report. That report requires the CPA to provide an opinion and assure that the Filter Building Gross Sales and Revenues are accurate. You can choose either option.</p>
+      <p>For your 2024 year end financials, please make sure they are either audited or if providing the attestation report they state an opinion.</p>
+      <p>If you have any questions about this just let me know.</p>
+      <p>Thanks,</p>
+      <div class="email-sig">
+        <strong>Nicole Oliver</strong><br/>
+        Supervisor – Business, City of Dallas | dallasparks.org<br/>
+        Dallas Park and Recreation Department<br/>
+        5620 Parkdale, Dallas, Texas 75227<br/>
+        O: 214.670.8568 &nbsp;|&nbsp; <a href="mailto:Nicole.Oliver@dallas.gov">Nicole.Oliver@dallas.gov</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-gold">
+    <strong>What This Email Confirms</strong>
+    <p>The City's own internal controls manager identified in January 2025 that the 2023 financial report <strong>did not meet Supplemental Agreement No. 1 requirements</strong>. This is not an outside claim — it is the City's own finding, in writing. The email asks the operator to fix this for 2024. Whether the 2024 submission meets requirements remains in question, and <strong>no enforcement action has been taken for the prior year's non-compliant submission.</strong></p>
+  </div>
+
+  <!-- Operator Response (from second screenshot) -->
+  <div class="callout callout-blue">
+    <strong>The Operator's Response</strong>
+    <p>In reply to the City's January 2025 email, White Rock Boathouse's Sue Ellen Chambers responded: <em>"I have sent your email to the CPA we use to provide our attestation report. He dealt directly with the city during the audit for an agreed-upon acceptable audit process and will be able to address this matter."</em></p>
+    <p>The operator did not commit to providing a compliant report — they referred the matter back to a CPA who had previously provided non-compliant submissions. As of the February 8, 2026 citizen briefing, <strong>no compliant independent audit for fiscal year 2022 or 2024 has been identified.</strong></p>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>Citizen Briefing Finding</strong>
+    <p>A Council-level safeguard — independent audits required after prior deficiencies were identified — may be unmet and unenforced. <strong>It is unclear which City department or position is responsible for verifying and enforcing this audit requirement.</strong> The City does not currently have independent confirmation of the gross revenue figures that determine how much the operator owes the public.</p>
+  </div>
+
+</div><!-- /issue3 -->
+
+
+<!-- ══════════════════════════════════════════
+     HISTORY
+══════════════════════════════════════════ -->
+<div id="tab-history" class="tab-panel">
+
+  <div class="hero">
+    <h1>History &amp; Press Coverage</h1>
+    <p>The problems at White Rock Boathouse have been documented for years — through City audits, public records, Park Board meetings, and press coverage. This is not a new story. It is a story of repeated failure to act.</p>
+  </div>
+
+  <div class="eyebrow">A Timeline of Documented Inaction</div>
+  <h2>Key Events</h2>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot">2003</div>
+      <div class="tl-body">
+        <div class="tl-date">2003 — Original Contract</div>
+        <h3>City Enters Agreement with White Rock Boathouse, Inc.</h3>
+        <p>The City formally contracts with WRBH in May 2003. The agreement authorizes WRBH to operate City-owned facilities on White Rock Lake "for the use and enjoyment to all segments of the Dallas Community." The original agreement contains no independent audit requirement and no enforceable public access provision.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot warn">2013</div>
+      <div class="tl-body">
+        <div class="tl-date">Mid-2013 to Late 2018 — Expired Contract Unnoticed</div>
+        <h3>Boathouse Operates Under Expired Contract for Five Years</h3>
+        <p>The Boomerang Boathouse contract expires, and the City fails to notice. White Rock Boathouse continues operating the facility under an expired agreement for approximately five years before the 2019 audit identifies the lapse. No enforcement action was taken.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">2019</div>
+      <div class="tl-body">
+        <div class="tl-date">March 29, 2019 — City Audit Report A19-010</div>
+        <h3>Audit Finds Multiple Deficiencies; Park Board Given Governance Assurances</h3>
+        <p>City Auditor issues Report A19-010 finding lack of internal controls, unverified revenue reporting, expired contracts, and absence of performance measures. Separately, the operator reportedly assures the Park &amp; Recreation Board (September 5, 2019 meeting) that term limits and governance safeguards will be put in place. <strong>Those assurances are never fulfilled.</strong></p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">2022</div>
+      <div class="tl-body">
+        <div class="tl-date">February–March 2022 — Supplemental Agreement No. 1</div>
+        <h3>City Creates Legal Obligation for Independent Audits</h3>
+        <p>The City and White Rock Boathouse execute Supplemental Agreement No. 1 (File No. 22-5339), amending Section 8.15 of the contract to require independent financial audits or examination-level attestation reports. This is a direct response to the 2019 audit findings and represents a binding contractual obligation on the operator.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot warn">2022–2024</div>
+      <div class="tl-body">
+        <div class="tl-date">2022–2024 — Continued Non-Compliance</div>
+        <h3>Compilations Submitted Instead of Required Audits</h3>
+        <p>The operator submits compilation reports for fiscal years 2022 and 2024 — a lower-standard financial document that does not meet the Supplemental Agreement requirement. No City department enforces the contractual audit requirement during this period.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">2025</div>
+      <div class="tl-body">
+        <div class="tl-date">January 28, 2025 — City Acknowledges Non-Compliance in Writing</div>
+        <h3>City Business Supervisor Flags That 2023 Report Did Not Meet Requirements</h3>
+        <p>Nicole Oliver of Dallas Park &amp; Recreation sends a written email to the operator acknowledging the 2023 year-end financial report "did not meet the Supplement #1 requirements." No enforcement action follows. The operator refers the matter to the same CPA whose prior reports were non-compliant.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">2025</div>
+      <div class="tl-body">
+        <div class="tl-date">June 2025 — D Magazine Coverage</div>
+        <h3>Dallas Media Reports on the White Rock Lake Rowing Controversy</h3>
+        <p><em>D Magazine</em> publishes an in-depth feature on the White Rock Lake rowing community and the access conflicts surrounding the boathouse, bringing broader public attention to the issues at this public facility.</p>
+        <a href="https://www.dmagazine.com/publications/d-magazine/2025/june/white-rock-lake-rowing-crews/" target="_blank" rel="noopener" class="tl-link">Read the D Magazine Article →</a>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot">2026</div>
+      <div class="tl-body">
+        <div class="tl-date">February 8, 2026 — Citizen Briefing Submitted to City Council</div>
+        <h3>Citizen Documents All Three Issues for City Council</h3>
+        <p>A citizen-prepared briefing is submitted to Dallas City Council documenting the three categories of concern: public access violations, governance failures, and audit non-compliance. The briefing notes that "the absence of a formal, independent review process appears to have allowed required governance and financial accountability measures to go unenforced, despite Council action intended to prevent that outcome."</p>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="eyebrow">Press Coverage</div>
+  <h2>As Reported by D Magazine — June 2025</h2>
+  <div class="article-card">
+    <div class="article-card-head">
+      <div class="evidence-label">D Magazine &middot; June 2025</div>
+      <h3>"White Rock Lake Rowing Crews" — Conflict, Access, and a Community Divided</h3>
+      <div class="article-pub">Published in <em>D Magazine</em> &middot; June 2025 &middot; White Rock Lake, Dallas, Texas</div>
+    </div>
+    <div class="article-card-body">
+      <p><em>D Magazine</em>'s June 2025 feature brought widespread public attention to the tensions at White Rock Lake's rowing community and the central role of White Rock Boathouse, Inc. in controlling access to the city-owned facility. The article examines how a public amenity has become a source of division and restricted access.</p>
+      <p>To read the full article as originally published:</p>
+      <a href="https://www.dmagazine.com/publications/d-magazine/2025/june/white-rock-lake-rowing-crews/" target="_blank" rel="noopener" class="read-btn">Read Full Article on D Magazine →</a>
+    </div>
+  </div>
+
+</div><!-- /history -->
+
+
+<!-- ══════════════════════════════════════════
+     TAKE ACTION
+══════════════════════════════════════════ -->
+<div id="tab-action" class="tab-panel">
+
+  <div class="cta-banner">
+    <h2>Your Voice Matters. Use It.</h2>
+    <p>The City of Dallas has the authority — and the contractual tools — to act. It simply hasn't chosen to. Contacting your City Council representative is one of the most direct and effective things you can do.</p>
+    <a href="mailto:citycouncil@dallas.gov" class="cta-btn">Email the City Council</a>
+  </div>
+
+  <div class="eyebrow">What We Are Asking For</div>
+  <h2>Specific Demands for City Council Action</h2>
+  <div class="demands-grid">
+    <div class="demand">
+      <div class="icon">🔍</div>
+      <h3>Enforce the Audit Requirement</h3>
+      <p>Direct the Park &amp; Recreation Department to enforce Section 8.15 of the Supplemental Agreement — require a compliant independent audit or attestation report immediately, including retroactively for non-compliant years.</p>
+    </div>
+    <div class="demand">
+      <div class="icon">📋</div>
+      <h3>Independent Compliance Review</h3>
+      <p>Commission a formal, independent review of all Supplemental Agreement obligations — including financial reporting, access provisions, and performance indicators.</p>
+    </div>
+    <div class="demand">
+      <div class="icon">🏛️</div>
+      <h3>Require Public Access in the Contract</h3>
+      <p>Amend the operator's contract to explicitly require non-discriminatory public access to the facility. A city-owned asset should not be permitted to turn away Dallas residents without legal basis.</p>
+    </div>
+    <div class="demand">
+      <div class="icon">📣</div>
+      <h3>Governance Reform</h3>
+      <p>Require the operator to implement term limits and governance safeguards — as promised to the Park Board in 2019. The City has the authority to condition the lease on these requirements.</p>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="eyebrow">Contact Your Representative</div>
+  <h2>Dallas City Council — Key Contacts</h2>
+  <p style="color:var(--gray);font-size:.94rem;margin-bottom:20px;">Not sure who your council member is? Visit <a href="https://dallascityhall.com/government/citycouncil/Pages/default.aspx" target="_blank" rel="noopener" style="color:var(--blue);">Dallas City Hall</a> and enter your address to find your district.</p>
+
+  <div class="council-grid">
+    <div class="council-card">
+      <div class="dist">Mayor</div>
+      <h3>Eric Johnson</h3>
+      <div class="info"><a href="mailto:mayor@dallas.gov">mayor@dallas.gov</a><br/>214-670-3301</div>
+    </div>
+    <div class="council-card">
+      <div class="dist">City Council — General</div>
+      <h3>City of Dallas</h3>
+      <div class="info"><a href="mailto:citycouncil@dallas.gov">citycouncil@dallas.gov</a><br/><a href="https://dallascityhall.com" target="_blank" rel="noopener">dallascityhall.com</a></div>
+    </div>
+    <div class="council-card">
+      <div class="dist">Park &amp; Recreation</div>
+      <h3>Superintendent Shola Adebajo</h3>
+      <div class="info">Dallas Park &amp; Recreation Dept.<br/>214-670-8858</div>
+    </div>
+    <div class="council-card">
+      <div class="dist">Business Oversight</div>
+      <h3>Nicole Oliver — Supervisor</h3>
+      <div class="info"><a href="mailto:Nicole.Oliver@dallas.gov">Nicole.Oliver@dallas.gov</a><br/>214-670-8568</div>
+    </div>
+  </div>
+
+  <div class="template-box">
+    <h3>📧 Sample Message to City Council</h3>
+    <p style="font-size:.88rem;color:var(--gray);margin-bottom:14px;">Copy and personalize this message when contacting your representative:</p>
+    <div class="template-text">
+      <p>Dear [Council Member Name],</p>
+      <p>I am writing as a Dallas resident and taxpayer regarding the ongoing failures at White Rock Boathouse — a city-owned facility at White Rock Lake operated under contract with White Rock Boathouse, Inc.</p>
+      <p>Three documented issues demand immediate attention: (1) Dallas residents and nonprofit organizations are being denied access to this public facility, with the City taking the position that the operator has no obligation to allow the public in; (2) governance safeguards promised to the Park Board in 2019 have never been implemented; and (3) City Council-mandated independent financial audits — required by the 2022 Supplemental Agreement in direct response to a 2019 City audit — have not been provided and are not being enforced.</p>
+      <p>I am asking you to call for enforcement of the Supplemental Agreement audit requirement, an independent compliance review, and contract amendments that explicitly protect the public's right to access this public facility.</p>
+      <p>Thank you,</p>
+      <p>[Your Name]<br/>[Your Dallas Neighborhood / District]</p>
+    </div>
+  </div>
+
+</div><!-- /action -->
+
+</main>
+
+<footer>
+  <p>This site is a public awareness initiative. All information is drawn from publicly available records, open records disclosures, and official City of Dallas communications.</p>
+  <p style="margin-top:6px;">White Rock Boathouse is a city-owned asset located at White Rock Lake, Dallas, Texas. City Audit A19-010 &middot; Supplemental Agreement No. 1 (File 22-5339) &middot; Citizen Briefing to City Council, Feb. 8, 2026.</p>
+  <p style="margin-top:6px;">Questions or documentation to share: <a href="mailto:paula@womensmentalwellness.com">paula@womensmentalwellness.com</a></p>
+</footer>
+
+<script>
+  function show(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    if (btn && btn.tagName === 'BUTTON') {
+      btn.classList.add('active');
+    } else {
+      document.querySelectorAll('nav button').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + name + "'")) {
+          b.classList.add('active');
+        }
+      });
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
